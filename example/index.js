@@ -76,7 +76,7 @@
         }
     };
 
-    global["C9t8iZfL-jpDx-4dLJ-fMvQ-dabJnCF6vSThh"] = function(asyncDependencies) {
+    global["mLyBB0qQ-wMNV-45FQ-zZ1R-WQur0GivnWqoH"] = function(asyncDependencies) {
         var i = -1,
             il = asyncDependencies.length - 1,
             dependency, index;
@@ -25358,8 +25358,7 @@ function connect(mapStateToProps, mapDispatchToProps, WrappedComponent) {
         _this._mappedDispatch = mapDispatchToProps(_this._store.dispatch, nextProps);
         _this._mappedProps = extend({}, _this._mappedState, _this._mappedDispatch);
 
-        return (
-            !shallowEquals(prevMappedState, _this._mappedState) ||
+        return (!shallowEquals(prevMappedState, _this._mappedState) ||
             !shallowEquals(prevChildren, nextProps.children)
         );
     }
@@ -25379,7 +25378,6 @@ function connect(mapStateToProps, mapDispatchToProps, WrappedComponent) {
 
     return Connect;
 }
-
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/extend@0.0.2/src/index.js-=@*/

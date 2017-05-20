@@ -70,8 +70,7 @@ function connect(mapStateToProps, mapDispatchToProps, WrappedComponent) {
         _this._mappedDispatch = mapDispatchToProps(_this._store.dispatch, nextProps);
         _this._mappedProps = extend({}, _this._mappedState, _this._mappedDispatch);
 
-        return (
-            !shallowEquals(prevMappedState, _this._mappedState) ||
+        return (!shallowEquals(prevMappedState, _this._mappedState) ||
             !shallowEquals(prevChildren, nextProps.children)
         );
     }
