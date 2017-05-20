@@ -2,7 +2,7 @@ var React = require("react"),
     PropTypes = require("prop-types"),
     extend = require("@nathanfaucett/extend"),
     createReactClass = require("create-react-class"),
-    notEqual = require("./notEqual");
+    shallowEquals = require("@nathanfaucett/shallow_equals");
 
 
 module.exports = connect;
@@ -71,8 +71,8 @@ function connect(mapStateToProps, mapDispatchToProps, WrappedComponent) {
         _this._mappedProps = extend({}, _this._mappedState, _this._mappedDispatch);
 
         return (
-            notEqual(prevMappedState, _this._mappedState) ||
-            notEqual(prevChildren, nextProps.children)
+            !shallowEquals(prevMappedState, _this._mappedState) ||
+            !shallowEquals(prevChildren, nextProps.children)
         );
     }
 

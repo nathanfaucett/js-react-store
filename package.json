@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/react-store",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "store bindings for react",
   "repository": {
     "type": "git",
@@ -33,10 +33,7 @@
   },
   "dependencies": {
     "@nathanfaucett/extend": "^0.0.2",
-    "@nathanfaucett/has": "^0.0.2",
-    "@nathanfaucett/is_array_like": "^0.0.2",
-    "@nathanfaucett/is_object": "^0.0.1",
-    "@nathanfaucett/is_primitive": "^0.0.2",
+    "@nathanfaucett/shallow_equals": "^0.0.2",
     "create-react-class": "^15.5.3",
     "prop-types": "^15.5.10",
     "react": "^15.5.4"

@@ -1,8 +1,8 @@
 var React = require("react"),
     ReactDOM = require("react-dom"),
     PropTypes = require("prop-types"),
+    createReactClass = require("create-react-class"),
     createStore = require("@nathanfaucett/store"),
-    inherits = require("@nathanfaucett/inherits"),
 
     reduxDevtoolsExtension = require("redux-devtools-extension"),
 
@@ -10,8 +10,6 @@ var React = require("react"),
 
 
 var store = createStore(),
-
-    Component = React.Component,
     Provider = ReactStore.Provider,
     connect = ReactStore.connect;
 
@@ -64,27 +62,24 @@ store.add(function counter(state, action) {
 });
 
 
-function Counter(props, children, context) {
-    Component.call(this, props, children, context);
-}
-inherits(Counter, Component);
+var Counter = createReactClass({
+    render: function() {
+        return (
+            React.createElement("div", null,
+                React.createElement("button", {
+                    onClick: this.props.incCount
+                }, "+"),
+                React.createElement("button", {
+                    onClick: this.props.decCount
+                }, "-"),
+                React.createElement("p", null, this.props.count)
+            )
+        );
+    }
+});
 
 Counter.propTypes = {
     count: PropTypes.number.isRequired
-};
-
-Counter.prototype.render = function() {
-    return (
-        React.createElement("div", null,
-            React.createElement("button", {
-                onClick: this.props.incCount
-            }, "+"),
-            React.createElement("button", {
-                onClick: this.props.decCount
-            }, "-"),
-            React.createElement("p", null, this.props.count)
-        )
-    );
 };
 
 

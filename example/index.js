@@ -76,7 +76,7 @@
         }
     };
 
-    global["jz0idIDn-hcqR-45pG-BOut-8U6rv0TkQMxoK"] = function(asyncDependencies) {
+    global["C9t8iZfL-jpDx-4dLJ-fMvQ-dabJnCF6vSThh"] = function(asyncDependencies) {
         var i = -1,
             il = asyncDependencies.length - 1,
             dependency, index;
@@ -110,8 +110,8 @@ function(require, exports, module, undefined, global) {
 var React = require(1),
     ReactDOM = require(2),
     PropTypes = require(3),
-    createStore = require(4),
-    inherits = require(5),
+    createReactClass = require(4),
+    createStore = require(5),
 
     reduxDevtoolsExtension = require(6),
 
@@ -119,8 +119,6 @@ var React = require(1),
 
 
 var store = createStore(),
-
-    Component = React.Component,
     Provider = ReactStore.Provider,
     connect = ReactStore.connect;
 
@@ -173,27 +171,24 @@ store.add(function counter(state, action) {
 });
 
 
-function Counter(props, children, context) {
-    Component.call(this, props, children, context);
-}
-inherits(Counter, Component);
+var Counter = createReactClass({
+    render: function() {
+        return (
+            React.createElement("div", null,
+                React.createElement("button", {
+                    onClick: this.props.incCount
+                }, "+"),
+                React.createElement("button", {
+                    onClick: this.props.decCount
+                }, "-"),
+                React.createElement("p", null, this.props.count)
+            )
+        );
+    }
+});
 
 Counter.propTypes = {
     count: PropTypes.number.isRequired
-};
-
-Counter.prototype.render = function() {
-    return (
-        React.createElement("div", null,
-            React.createElement("button", {
-                onClick: this.props.incCount
-            }, "+"),
-            React.createElement("button", {
-                onClick: this.props.decCount
-            }, "-"),
-            React.createElement("p", null, this.props.count)
-        )
-    );
 };
 
 
@@ -282,11 +277,38 @@ if (process.env.NODE_ENV !== 'production') {
 
 },
 function(require, exports, module, undefined, global) {
+/*@=-create-react-class@15.5.3/index.js-=@*/
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
+'use strict';
+
+var React = require(1);
+var factory = require(188);
+
+// Hack to grab NoopUpdateQueue from isomorphic React
+var ReactNoopUpdateQueue = new React.Component().updater;
+
+module.exports = factory(
+  React.Component,
+  React.isValidElement,
+  ReactNoopUpdateQueue
+);
+
+},
+function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/store@0.0.3/src/index.js-=@*/
-var isFunction = require(188),
-    isNull = require(189),
-    isUndefined = require(190),
-    List = require(191);
+var isFunction = require(189),
+    isNull = require(190),
+    isUndefined = require(191),
+    List = require(192);
 
 
 module.exports = createStore;
@@ -548,60 +570,10 @@ function createStore() {
 }
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/inherits@0.0.3/src/index.js-=@*/
-var create = require(213),
-    extend = require(214),
-    mixin = require(215),
-    defineProperty = require(216);
-
-
-var descriptor = {
-    configurable: true,
-    enumerable: false,
-    writable: true,
-    value: null
-};
-
-
-module.exports = inherits;
-
-
-function inherits(child, parent) {
-
-    mixin(child, parent);
-
-    if (child.__super) {
-        child.prototype = extend(create(parent.prototype), child.__super, child.prototype);
-    } else {
-        child.prototype = extend(create(parent.prototype), child.prototype);
-    }
-
-    defineNonEnumerableProperty(child, "__super", parent.prototype);
-    defineNonEnumerableProperty(child.prototype, "constructor", child);
-
-    child.defineStatic = defineStatic;
-    child.super_ = parent;
-
-    return child;
-}
-inherits.defineProperty = defineNonEnumerableProperty;
-
-function defineNonEnumerableProperty(object, name, value) {
-    descriptor.value = value;
-    defineProperty(object, name, descriptor);
-    descriptor.value = null;
-}
-
-function defineStatic(name, value) {
-    defineNonEnumerableProperty(this, name, value);
-}
-
-},
-function(require, exports, module, undefined, global) {
 /*@=-redux-devtools-extension@2.13.2/index.js-=@*/
 "use strict";
 
-var compose = require(220).compose;
+var compose = require(214).compose;
 
 exports.__esModule = true;
 exports.composeWithDevTools = (
@@ -622,12 +594,12 @@ exports.devToolsEnhancer = (
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/react-store@0.0.1/src/index.js-=@*/
+/*@=-@nathanfaucett/react-store@0.0.2/src/index.js-=@*/
 var ReactStore = exports;
 
 
-ReactStore.Provider = require(240);
-ReactStore.connect = require(241);
+ReactStore.Provider = require(234);
+ReactStore.connect = require(235);
 },
 function(require, exports, module, undefined, global) {
 /*@=-react@15.5.4/lib/React.js-=@*/
@@ -22084,6 +22056,735 @@ module.exports = function() {
 
 },
 function(require, exports, module, undefined, global) {
+/*@=-create-react-class@15.5.3/factory.js-=@*/
+var process = require(9);
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
+'use strict';
+
+var _assign = require(10);
+
+var emptyObject = require(33);
+var _invariant = require(27);
+
+if (process.env.NODE_ENV !== 'production') {
+  var warning = require(20);
+}
+
+var MIXINS_KEY = 'mixins';
+
+// Helper function to allow the creation of anonymous functions which do not
+// have .name set to the name of the variable being assigned to.
+function identity(fn) {
+  return fn;
+}
+
+var ReactPropTypeLocationNames;
+if (process.env.NODE_ENV !== 'production') {
+  ReactPropTypeLocationNames = {
+    prop: 'prop',
+    context: 'context',
+    childContext: 'child context',
+  };
+} else {
+  ReactPropTypeLocationNames = {};
+}
+
+function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
+  /**
+   * Policies that describe methods in `ReactClassInterface`.
+   */
+
+
+  var injectedMixins = [];
+
+  /**
+   * Composite components are higher-level components that compose other composite
+   * or host components.
+   *
+   * To create a new type of `ReactClass`, pass a specification of
+   * your new class to `React.createClass`. The only requirement of your class
+   * specification is that you implement a `render` method.
+   *
+   *   var MyComponent = React.createClass({
+   *     render: function() {
+   *       return <div>Hello World</div>;
+   *     }
+   *   });
+   *
+   * The class specification supports a specific protocol of methods that have
+   * special meaning (e.g. `render`). See `ReactClassInterface` for
+   * more the comprehensive protocol. Any other properties and methods in the
+   * class specification will be available on the prototype.
+   *
+   * @interface ReactClassInterface
+   * @internal
+   */
+  var ReactClassInterface = {
+
+    /**
+     * An array of Mixin objects to include when defining your component.
+     *
+     * @type {array}
+     * @optional
+     */
+    mixins: 'DEFINE_MANY',
+
+    /**
+     * An object containing properties and methods that should be defined on
+     * the component's constructor instead of its prototype (static methods).
+     *
+     * @type {object}
+     * @optional
+     */
+    statics: 'DEFINE_MANY',
+
+    /**
+     * Definition of prop types for this component.
+     *
+     * @type {object}
+     * @optional
+     */
+    propTypes: 'DEFINE_MANY',
+
+    /**
+     * Definition of context types for this component.
+     *
+     * @type {object}
+     * @optional
+     */
+    contextTypes: 'DEFINE_MANY',
+
+    /**
+     * Definition of context types this component sets for its children.
+     *
+     * @type {object}
+     * @optional
+     */
+    childContextTypes: 'DEFINE_MANY',
+
+    // ==== Definition methods ====
+
+    /**
+     * Invoked when the component is mounted. Values in the mapping will be set on
+     * `this.props` if that prop is not specified (i.e. using an `in` check).
+     *
+     * This method is invoked before `getInitialState` and therefore cannot rely
+     * on `this.state` or use `this.setState`.
+     *
+     * @return {object}
+     * @optional
+     */
+    getDefaultProps: 'DEFINE_MANY_MERGED',
+
+    /**
+     * Invoked once before the component is mounted. The return value will be used
+     * as the initial value of `this.state`.
+     *
+     *   getInitialState: function() {
+     *     return {
+     *       isOn: false,
+     *       fooBaz: new BazFoo()
+     *     }
+     *   }
+     *
+     * @return {object}
+     * @optional
+     */
+    getInitialState: 'DEFINE_MANY_MERGED',
+
+    /**
+     * @return {object}
+     * @optional
+     */
+    getChildContext: 'DEFINE_MANY_MERGED',
+
+    /**
+     * Uses props from `this.props` and state from `this.state` to render the
+     * structure of the component.
+     *
+     * No guarantees are made about when or how often this method is invoked, so
+     * it must not have side effects.
+     *
+     *   render: function() {
+     *     var name = this.props.name;
+     *     return <div>Hello, {name}!</div>;
+     *   }
+     *
+     * @return {ReactComponent}
+     * @nosideeffects
+     * @required
+     */
+    render: 'DEFINE_ONCE',
+
+    // ==== Delegate methods ====
+
+    /**
+     * Invoked when the component is initially created and about to be mounted.
+     * This may have side effects, but any external subscriptions or data created
+     * by this method must be cleaned up in `componentWillUnmount`.
+     *
+     * @optional
+     */
+    componentWillMount: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component has been mounted and has a DOM representation.
+     * However, there is no guarantee that the DOM node is in the document.
+     *
+     * Use this as an opportunity to operate on the DOM when the component has
+     * been mounted (initialized and rendered) for the first time.
+     *
+     * @param {DOMElement} rootNode DOM element representing the component.
+     * @optional
+     */
+    componentDidMount: 'DEFINE_MANY',
+
+    /**
+     * Invoked before the component receives new props.
+     *
+     * Use this as an opportunity to react to a prop transition by updating the
+     * state using `this.setState`. Current props are accessed via `this.props`.
+     *
+     *   componentWillReceiveProps: function(nextProps, nextContext) {
+     *     this.setState({
+     *       likesIncreasing: nextProps.likeCount > this.props.likeCount
+     *     });
+     *   }
+     *
+     * NOTE: There is no equivalent `componentWillReceiveState`. An incoming prop
+     * transition may cause a state change, but the opposite is not true. If you
+     * need it, you are probably looking for `componentWillUpdate`.
+     *
+     * @param {object} nextProps
+     * @optional
+     */
+    componentWillReceiveProps: 'DEFINE_MANY',
+
+    /**
+     * Invoked while deciding if the component should be updated as a result of
+     * receiving new props, state and/or context.
+     *
+     * Use this as an opportunity to `return false` when you're certain that the
+     * transition to the new props/state/context will not require a component
+     * update.
+     *
+     *   shouldComponentUpdate: function(nextProps, nextState, nextContext) {
+     *     return !equal(nextProps, this.props) ||
+     *       !equal(nextState, this.state) ||
+     *       !equal(nextContext, this.context);
+     *   }
+     *
+     * @param {object} nextProps
+     * @param {?object} nextState
+     * @param {?object} nextContext
+     * @return {boolean} True if the component should update.
+     * @optional
+     */
+    shouldComponentUpdate: 'DEFINE_ONCE',
+
+    /**
+     * Invoked when the component is about to update due to a transition from
+     * `this.props`, `this.state` and `this.context` to `nextProps`, `nextState`
+     * and `nextContext`.
+     *
+     * Use this as an opportunity to perform preparation before an update occurs.
+     *
+     * NOTE: You **cannot** use `this.setState()` in this method.
+     *
+     * @param {object} nextProps
+     * @param {?object} nextState
+     * @param {?object} nextContext
+     * @param {ReactReconcileTransaction} transaction
+     * @optional
+     */
+    componentWillUpdate: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component's DOM representation has been updated.
+     *
+     * Use this as an opportunity to operate on the DOM when the component has
+     * been updated.
+     *
+     * @param {object} prevProps
+     * @param {?object} prevState
+     * @param {?object} prevContext
+     * @param {DOMElement} rootNode DOM element representing the component.
+     * @optional
+     */
+    componentDidUpdate: 'DEFINE_MANY',
+
+    /**
+     * Invoked when the component is about to be removed from its parent and have
+     * its DOM representation destroyed.
+     *
+     * Use this as an opportunity to deallocate any external resources.
+     *
+     * NOTE: There is no `componentDidUnmount` since your component will have been
+     * destroyed by that point.
+     *
+     * @optional
+     */
+    componentWillUnmount: 'DEFINE_MANY',
+
+    // ==== Advanced methods ====
+
+    /**
+     * Updates the component's currently mounted DOM representation.
+     *
+     * By default, this implements React's rendering and reconciliation algorithm.
+     * Sophisticated clients may wish to override this.
+     *
+     * @param {ReactReconcileTransaction} transaction
+     * @internal
+     * @overridable
+     */
+    updateComponent: 'OVERRIDE_BASE'
+
+  };
+
+  /**
+   * Mapping from class specification keys to special processing functions.
+   *
+   * Although these are declared like instance properties in the specification
+   * when defining classes using `React.createClass`, they are actually static
+   * and are accessible on the constructor instead of the prototype. Despite
+   * being static, they must be defined outside of the "statics" key under
+   * which all other static methods are defined.
+   */
+  var RESERVED_SPEC_KEYS = {
+    displayName: function (Constructor, displayName) {
+      Constructor.displayName = displayName;
+    },
+    mixins: function (Constructor, mixins) {
+      if (mixins) {
+        for (var i = 0; i < mixins.length; i++) {
+          mixSpecIntoComponent(Constructor, mixins[i]);
+        }
+      }
+    },
+    childContextTypes: function (Constructor, childContextTypes) {
+      if (process.env.NODE_ENV !== 'production') {
+        validateTypeDef(Constructor, childContextTypes, 'childContext');
+      }
+      Constructor.childContextTypes = _assign({}, Constructor.childContextTypes, childContextTypes);
+    },
+    contextTypes: function (Constructor, contextTypes) {
+      if (process.env.NODE_ENV !== 'production') {
+        validateTypeDef(Constructor, contextTypes, 'context');
+      }
+      Constructor.contextTypes = _assign({}, Constructor.contextTypes, contextTypes);
+    },
+    /**
+     * Special case getDefaultProps which should move into statics but requires
+     * automatic merging.
+     */
+    getDefaultProps: function (Constructor, getDefaultProps) {
+      if (Constructor.getDefaultProps) {
+        Constructor.getDefaultProps = createMergedResultFunction(Constructor.getDefaultProps, getDefaultProps);
+      } else {
+        Constructor.getDefaultProps = getDefaultProps;
+      }
+    },
+    propTypes: function (Constructor, propTypes) {
+      if (process.env.NODE_ENV !== 'production') {
+        validateTypeDef(Constructor, propTypes, 'prop');
+      }
+      Constructor.propTypes = _assign({}, Constructor.propTypes, propTypes);
+    },
+    statics: function (Constructor, statics) {
+      mixStaticSpecIntoComponent(Constructor, statics);
+    },
+    autobind: function () {} };
+
+  function validateTypeDef(Constructor, typeDef, location) {
+    for (var propName in typeDef) {
+      if (typeDef.hasOwnProperty(propName)) {
+        // use a warning instead of an _invariant so components
+        // don't show up in prod but only in __DEV__
+        process.env.NODE_ENV !== 'production' ? warning(typeof typeDef[propName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', Constructor.displayName || 'ReactClass', ReactPropTypeLocationNames[location], propName) : void 0;
+      }
+    }
+  }
+
+  function validateMethodOverride(isAlreadyDefined, name) {
+    var specPolicy = ReactClassInterface.hasOwnProperty(name) ? ReactClassInterface[name] : null;
+
+    // Disallow overriding of base class methods unless explicitly allowed.
+    if (ReactClassMixin.hasOwnProperty(name)) {
+      _invariant(specPolicy === 'OVERRIDE_BASE', 'ReactClassInterface: You are attempting to override ' + '`%s` from your class specification. Ensure that your method names ' + 'do not overlap with React methods.', name);
+    }
+
+    // Disallow defining methods more than once unless explicitly allowed.
+    if (isAlreadyDefined) {
+      _invariant(specPolicy === 'DEFINE_MANY' || specPolicy === 'DEFINE_MANY_MERGED', 'ReactClassInterface: You are attempting to define ' + '`%s` on your component more than once. This conflict may be due ' + 'to a mixin.', name);
+    }
+  }
+
+  /**
+   * Mixin helper which handles policy validation and reserved
+   * specification keys when building React classes.
+   */
+  function mixSpecIntoComponent(Constructor, spec) {
+    if (!spec) {
+      if (process.env.NODE_ENV !== 'production') {
+        var typeofSpec = typeof spec;
+        var isMixinValid = typeofSpec === 'object' && spec !== null;
+
+        process.env.NODE_ENV !== 'production' ? warning(isMixinValid, '%s: You\'re attempting to include a mixin that is either null ' + 'or not an object. Check the mixins included by the component, ' + 'as well as any mixins they include themselves. ' + 'Expected object but got %s.', Constructor.displayName || 'ReactClass', spec === null ? null : typeofSpec) : void 0;
+      }
+
+      return;
+    }
+
+    _invariant(typeof spec !== 'function', 'ReactClass: You\'re attempting to ' + 'use a component class or function as a mixin. Instead, just use a ' + 'regular object.');
+    _invariant(!isValidElement(spec), 'ReactClass: You\'re attempting to ' + 'use a component as a mixin. Instead, just use a regular object.');
+
+    var proto = Constructor.prototype;
+    var autoBindPairs = proto.__reactAutoBindPairs;
+
+    // By handling mixins before any other properties, we ensure the same
+    // chaining order is applied to methods with DEFINE_MANY policy, whether
+    // mixins are listed before or after these methods in the spec.
+    if (spec.hasOwnProperty(MIXINS_KEY)) {
+      RESERVED_SPEC_KEYS.mixins(Constructor, spec.mixins);
+    }
+
+    for (var name in spec) {
+      if (!spec.hasOwnProperty(name)) {
+        continue;
+      }
+
+      if (name === MIXINS_KEY) {
+        // We have already handled mixins in a special case above.
+        continue;
+      }
+
+      var property = spec[name];
+      var isAlreadyDefined = proto.hasOwnProperty(name);
+      validateMethodOverride(isAlreadyDefined, name);
+
+      if (RESERVED_SPEC_KEYS.hasOwnProperty(name)) {
+        RESERVED_SPEC_KEYS[name](Constructor, property);
+      } else {
+        // Setup methods on prototype:
+        // The following member methods should not be automatically bound:
+        // 1. Expected ReactClass methods (in the "interface").
+        // 2. Overridden methods (that were mixed in).
+        var isReactClassMethod = ReactClassInterface.hasOwnProperty(name);
+        var isFunction = typeof property === 'function';
+        var shouldAutoBind = isFunction && !isReactClassMethod && !isAlreadyDefined && spec.autobind !== false;
+
+        if (shouldAutoBind) {
+          autoBindPairs.push(name, property);
+          proto[name] = property;
+        } else {
+          if (isAlreadyDefined) {
+            var specPolicy = ReactClassInterface[name];
+
+            // These cases should already be caught by validateMethodOverride.
+            _invariant(isReactClassMethod && (specPolicy === 'DEFINE_MANY_MERGED' || specPolicy === 'DEFINE_MANY'), 'ReactClass: Unexpected spec policy %s for key %s ' + 'when mixing in component specs.', specPolicy, name);
+
+            // For methods which are defined more than once, call the existing
+            // methods before calling the new property, merging if appropriate.
+            if (specPolicy === 'DEFINE_MANY_MERGED') {
+              proto[name] = createMergedResultFunction(proto[name], property);
+            } else if (specPolicy === 'DEFINE_MANY') {
+              proto[name] = createChainedFunction(proto[name], property);
+            }
+          } else {
+            proto[name] = property;
+            if (process.env.NODE_ENV !== 'production') {
+              // Add verbose displayName to the function, which helps when looking
+              // at profiling tools.
+              if (typeof property === 'function' && spec.displayName) {
+                proto[name].displayName = spec.displayName + '_' + name;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function mixStaticSpecIntoComponent(Constructor, statics) {
+    if (!statics) {
+      return;
+    }
+    for (var name in statics) {
+      var property = statics[name];
+      if (!statics.hasOwnProperty(name)) {
+        continue;
+      }
+
+      var isReserved = name in RESERVED_SPEC_KEYS;
+      _invariant(!isReserved, 'ReactClass: You are attempting to define a reserved ' + 'property, `%s`, that shouldn\'t be on the "statics" key. Define it ' + 'as an instance property instead; it will still be accessible on the ' + 'constructor.', name);
+
+      var isInherited = name in Constructor;
+      _invariant(!isInherited, 'ReactClass: You are attempting to define ' + '`%s` on your component more than once. This conflict may be ' + 'due to a mixin.', name);
+      Constructor[name] = property;
+    }
+  }
+
+  /**
+   * Merge two objects, but throw if both contain the same key.
+   *
+   * @param {object} one The first object, which is mutated.
+   * @param {object} two The second object
+   * @return {object} one after it has been mutated to contain everything in two.
+   */
+  function mergeIntoWithNoDuplicateKeys(one, two) {
+    _invariant(one && two && typeof one === 'object' && typeof two === 'object', 'mergeIntoWithNoDuplicateKeys(): Cannot merge non-objects.');
+
+    for (var key in two) {
+      if (two.hasOwnProperty(key)) {
+        _invariant(one[key] === undefined, 'mergeIntoWithNoDuplicateKeys(): ' + 'Tried to merge two objects with the same key: `%s`. This conflict ' + 'may be due to a mixin; in particular, this may be caused by two ' + 'getInitialState() or getDefaultProps() methods returning objects ' + 'with clashing keys.', key);
+        one[key] = two[key];
+      }
+    }
+    return one;
+  }
+
+  /**
+   * Creates a function that invokes two functions and merges their return values.
+   *
+   * @param {function} one Function to invoke first.
+   * @param {function} two Function to invoke second.
+   * @return {function} Function that invokes the two argument functions.
+   * @private
+   */
+  function createMergedResultFunction(one, two) {
+    return function mergedResult() {
+      var a = one.apply(this, arguments);
+      var b = two.apply(this, arguments);
+      if (a == null) {
+        return b;
+      } else if (b == null) {
+        return a;
+      }
+      var c = {};
+      mergeIntoWithNoDuplicateKeys(c, a);
+      mergeIntoWithNoDuplicateKeys(c, b);
+      return c;
+    };
+  }
+
+  /**
+   * Creates a function that invokes two functions and ignores their return vales.
+   *
+   * @param {function} one Function to invoke first.
+   * @param {function} two Function to invoke second.
+   * @return {function} Function that invokes the two argument functions.
+   * @private
+   */
+  function createChainedFunction(one, two) {
+    return function chainedFunction() {
+      one.apply(this, arguments);
+      two.apply(this, arguments);
+    };
+  }
+
+  /**
+   * Binds a method to the component.
+   *
+   * @param {object} component Component whose method is going to be bound.
+   * @param {function} method Method to be bound.
+   * @return {function} The bound method.
+   */
+  function bindAutoBindMethod(component, method) {
+    var boundMethod = method.bind(component);
+    if (process.env.NODE_ENV !== 'production') {
+      boundMethod.__reactBoundContext = component;
+      boundMethod.__reactBoundMethod = method;
+      boundMethod.__reactBoundArguments = null;
+      var componentName = component.constructor.displayName;
+      var _bind = boundMethod.bind;
+      boundMethod.bind = function (newThis) {
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        // User is trying to bind() an autobound method; we effectively will
+        // ignore the value of "this" that the user is trying to use, so
+        // let's warn.
+        if (newThis !== component && newThis !== null) {
+          process.env.NODE_ENV !== 'production' ? warning(false, 'bind(): React component methods may only be bound to the ' + 'component instance. See %s', componentName) : void 0;
+        } else if (!args.length) {
+          process.env.NODE_ENV !== 'production' ? warning(false, 'bind(): You are binding a component method to the component. ' + 'React does this for you automatically in a high-performance ' + 'way, so you can safely remove this call. See %s', componentName) : void 0;
+          return boundMethod;
+        }
+        var reboundMethod = _bind.apply(boundMethod, arguments);
+        reboundMethod.__reactBoundContext = component;
+        reboundMethod.__reactBoundMethod = method;
+        reboundMethod.__reactBoundArguments = args;
+        return reboundMethod;
+      };
+    }
+    return boundMethod;
+  }
+
+  /**
+   * Binds all auto-bound methods in a component.
+   *
+   * @param {object} component Component whose method is going to be bound.
+   */
+  function bindAutoBindMethods(component) {
+    var pairs = component.__reactAutoBindPairs;
+    for (var i = 0; i < pairs.length; i += 2) {
+      var autoBindKey = pairs[i];
+      var method = pairs[i + 1];
+      component[autoBindKey] = bindAutoBindMethod(component, method);
+    }
+  }
+
+  var IsMountedMixin = {
+    componentDidMount: function () {
+      this.__isMounted = true;
+    },
+    componentWillUnmount: function () {
+      this.__isMounted = false;
+    }
+  };
+
+  /**
+   * Add more to the ReactClass base class. These are all legacy features and
+   * therefore not already part of the modern ReactComponent.
+   */
+  var ReactClassMixin = {
+
+    /**
+     * TODO: This will be deprecated because state should always keep a consistent
+     * type signature and the only use case for this, is to avoid that.
+     */
+    replaceState: function (newState, callback) {
+      this.updater.enqueueReplaceState(this, newState, callback);
+    },
+
+    /**
+     * Checks whether or not this composite component is mounted.
+     * @return {boolean} True if mounted, false otherwise.
+     * @protected
+     * @final
+     */
+    isMounted: function () {
+      if (process.env.NODE_ENV !== 'production') {
+        process.env.NODE_ENV !== 'production' ? warning(this.__didWarnIsMounted, '%s: isMounted is deprecated. Instead, make sure to clean up ' + 'subscriptions and pending requests in componentWillUnmount to ' + 'prevent memory leaks.', this.constructor && this.constructor.displayName || this.name || 'Component') : void 0;
+        this.__didWarnIsMounted = true;
+      }
+      return !!this.__isMounted;
+    }
+  };
+
+  var ReactClassComponent = function () {};
+  _assign(ReactClassComponent.prototype, ReactComponent.prototype, ReactClassMixin);
+
+  /**
+   * Creates a composite component class given a class specification.
+   * See https://facebook.github.io/react/docs/top-level-api.html#react.createclass
+   *
+   * @param {object} spec Class specification (which must define `render`).
+   * @return {function} Component constructor function.
+   * @public
+   */
+  function createClass(spec) {
+    // To keep our warnings more understandable, we'll use a little hack here to
+    // ensure that Constructor.name !== 'Constructor'. This makes sure we don't
+    // unnecessarily identify a class without displayName as 'Constructor'.
+    var Constructor = identity(function (props, context, updater) {
+      // This constructor gets overridden by mocks. The argument is used
+      // by mocks to assert on what gets mounted.
+
+      if (process.env.NODE_ENV !== 'production') {
+        process.env.NODE_ENV !== 'production' ? warning(this instanceof Constructor, 'Something is calling a React component directly. Use a factory or ' + 'JSX instead. See: https://fb.me/react-legacyfactory') : void 0;
+      }
+
+      // Wire up auto-binding
+      if (this.__reactAutoBindPairs.length) {
+        bindAutoBindMethods(this);
+      }
+
+      this.props = props;
+      this.context = context;
+      this.refs = emptyObject;
+      this.updater = updater || ReactNoopUpdateQueue;
+
+      this.state = null;
+
+      // ReactClasses doesn't have constructors. Instead, they use the
+      // getInitialState and componentWillMount methods for initialization.
+
+      var initialState = this.getInitialState ? this.getInitialState() : null;
+      if (process.env.NODE_ENV !== 'production') {
+        // We allow auto-mocks to proceed as if they're returning null.
+        if (initialState === undefined && this.getInitialState._isMockFunction) {
+          // This is probably bad practice. Consider warning here and
+          // deprecating this convenience.
+          initialState = null;
+        }
+      }
+      _invariant(typeof initialState === 'object' && !Array.isArray(initialState), '%s.getInitialState(): must return an object or null', Constructor.displayName || 'ReactCompositeComponent');
+
+      this.state = initialState;
+    });
+    Constructor.prototype = new ReactClassComponent();
+    Constructor.prototype.constructor = Constructor;
+    Constructor.prototype.__reactAutoBindPairs = [];
+
+    injectedMixins.forEach(mixSpecIntoComponent.bind(null, Constructor));
+
+    mixSpecIntoComponent(Constructor, IsMountedMixin);
+    mixSpecIntoComponent(Constructor, spec);
+
+    // Initialize the defaultProps property after all mixins have been merged.
+    if (Constructor.getDefaultProps) {
+      Constructor.defaultProps = Constructor.getDefaultProps();
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      // This is a tag to indicate that the use of these method names is ok,
+      // since it's used with createClass. If it's not, then it's likely a
+      // mistake so we'll warn you to use the static property, property
+      // initializer or constructor respectively.
+      if (Constructor.getDefaultProps) {
+        Constructor.getDefaultProps.isReactClassApproved = {};
+      }
+      if (Constructor.prototype.getInitialState) {
+        Constructor.prototype.getInitialState.isReactClassApproved = {};
+      }
+    }
+
+    _invariant(Constructor.prototype.render, 'createClass(...): Class specification must implement a `render` method.');
+
+    if (process.env.NODE_ENV !== 'production') {
+      process.env.NODE_ENV !== 'production' ? warning(!Constructor.prototype.componentShouldUpdate, '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', spec.displayName || 'A component') : void 0;
+      process.env.NODE_ENV !== 'production' ? warning(!Constructor.prototype.componentWillRecieveProps, '%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', spec.displayName || 'A component') : void 0;
+    }
+
+    // Reduce time spent doing lookups by setting these on the prototype.
+    for (var methodName in ReactClassInterface) {
+      if (!Constructor.prototype[methodName]) {
+        Constructor.prototype[methodName] = null;
+      }
+    }
+
+    return Constructor;
+  }
+
+  return createClass;
+}
+
+module.exports = factory;
+
+},
+function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_function@0.0.1/src/index.js-=@*/
 var objectToString = Object.prototype.toString,
     isFunction;
@@ -22129,16 +22830,16 @@ function isUndefined(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/immutable-list@0.0.3/src/index.js-=@*/
-var isNull = require(189),
-    isUndefined = require(190),
-    isArrayLike = require(192),
-    isNumber = require(193),
-    Iterator = require(194),
-    fastBindThis = require(195),
-    fastSlice = require(196),
-    defineProperty = require(197),
-    freeze = require(198),
-    isEqual = require(199);
+var isNull = require(190),
+    isUndefined = require(191),
+    isArrayLike = require(193),
+    isNumber = require(194),
+    Iterator = require(195),
+    fastBindThis = require(196),
+    fastSlice = require(197),
+    defineProperty = require(198),
+    freeze = require(199),
+    isEqual = require(200);
 
 
 var INTERNAL_CREATE = {},
@@ -22936,9 +23637,9 @@ function findNode(root, index) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_array_like@0.0.2/src/index.js-=@*/
-var isLength = require(200),
-    isFunction = require(188),
-    isObject = require(201);
+var isLength = require(201),
+    isFunction = require(189),
+    isObject = require(202);
 
 
 module.exports = isArrayLike;
@@ -22961,9 +23662,9 @@ function isNumber(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/iterator@0.0.2/src/index.js-=@*/
-var apply = require(202),
-    isFunction = require(188),
-    isUndefined = require(190);
+var apply = require(203),
+    isFunction = require(189),
+    isUndefined = require(191);
 
 
 var KEYS = 0,
@@ -23061,7 +23762,7 @@ IteratorPrototype[ITERATOR_SYMBOL] = IteratorPrototype.iterator;
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/fast_bind_this@0.0.1/src/index.js-=@*/
-var isNumber = require(193);
+var isNumber = require(194);
 
 
 module.exports = fastBindThis;
@@ -23099,8 +23800,8 @@ function fastBindThis(callback, thisArg, length) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/fast_slice@0.0.1/src/index.js-=@*/
-var clamp = require(204),
-    isNumber = require(193);
+var clamp = require(205),
+    isNumber = require(194);
 
 
 module.exports = fastSlice;
@@ -23127,11 +23828,11 @@ function fastSlice(array, offset) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/define_property@0.0.3/src/index.js-=@*/
-var isObject = require(201),
-    isFunction = require(188),
-    isPrimitive = require(205),
-    isNative = require(206),
-    has = require(207);
+var isObject = require(202),
+    isFunction = require(189),
+    isPrimitive = require(206),
+    isNative = require(207),
+    has = require(208);
 
 
 var nativeDefineProperty = Object.defineProperty;
@@ -23185,8 +23886,8 @@ if (!isNative(nativeDefineProperty) || !(function() {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/freeze@0.0.1/src/index.js-=@*/
-var isNative = require(206),
-    emptyFunction = require(212);
+var isNative = require(207),
+    emptyFunction = require(213);
 
 
 var nativeFreeze = Object.freeze;
@@ -23225,7 +23926,7 @@ function isEqual(a, b) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_length@0.0.1/src/index.js-=@*/
-var isNumber = require(193);
+var isNumber = require(194);
 
 
 var MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
@@ -23241,7 +23942,7 @@ function isLength(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_object@0.0.1/src/index.js-=@*/
-var isNull = require(189);
+var isNull = require(190);
 
 
 module.exports = isObject;
@@ -23255,7 +23956,7 @@ function isObject(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/apply@0.0.1/src/index.js-=@*/
-var isNullOrUndefined = require(203);
+var isNullOrUndefined = require(204);
 
 
 module.exports = apply;
@@ -23310,8 +24011,8 @@ function applyThisArg(fn, args, thisArg) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_null_or_undefined@0.0.1/src/index.js-=@*/
-var isNull = require(189),
-    isUndefined = require(190);
+var isNull = require(190),
+    isUndefined = require(191);
 
 
 module.exports = isNullOrUndefined;
@@ -23352,7 +24053,7 @@ function clamp(x, min, max) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_primitive@0.0.2/src/index.js-=@*/
-var isNullOrUndefined = require(203);
+var isNullOrUndefined = require(204);
 
 
 module.exports = isPrimitive;
@@ -23366,9 +24067,9 @@ function isPrimitive(obj) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_native@0.0.2/src/index.js-=@*/
-var isFunction = require(188),
-    isNullOrUndefined = require(203),
-    escapeRegExp = require(208);
+var isFunction = require(189),
+    isNullOrUndefined = require(204),
+    escapeRegExp = require(209);
 
 
 var reHostCtor = /^\[object .+?Constructor\]$/,
@@ -23414,9 +24115,9 @@ isHostObject = function isHostObject(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/has@0.0.2/src/index.js-=@*/
-var isNative = require(206),
-    getPrototypeOf = require(211),
-    isNullOrUndefined = require(203);
+var isNative = require(207),
+    getPrototypeOf = require(212),
+    isNullOrUndefined = require(204);
 
 
 var nativeHasOwnProp = Object.prototype.hasOwnProperty,
@@ -23457,7 +24158,7 @@ if (isNative(nativeHasOwnProp)) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/escape_regexp@0.0.1/src/index.js-=@*/
-var toString = require(209);
+var toString = require(210);
 
 
 var reRegExpChars = /[.*+?\^${}()|\[\]\/\\]/g,
@@ -23479,8 +24180,8 @@ function escapeRegExp(string) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/to_string@0.0.1/src/index.js-=@*/
-var isString = require(210),
-    isNullOrUndefined = require(203);
+var isString = require(211),
+    isNullOrUndefined = require(204);
 
 
 module.exports = toString;
@@ -23509,9 +24210,9 @@ function isString(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/get_prototype_of@0.0.1/src/index.js-=@*/
-var isObject = require(201),
-    isNative = require(206),
-    isNullOrUndefined = require(203);
+var isObject = require(202),
+    isNative = require(207),
+    isNullOrUndefined = require(204);
 
 
 var nativeGetPrototypeOf = Object.getPrototypeOf,
@@ -23572,302 +24273,6 @@ emptyFunction.thatReturnsArgument = function(argument) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/create@0.0.2/src/index.js-=@*/
-var isNull = require(189),
-    isNative = require(206),
-    isPrimitive = require(205);
-
-
-var nativeCreate = Object.create;
-
-
-module.exports = create;
-
-
-function create(object) {
-    return nativeCreate(isPrimitive(object) ? null : object);
-}
-
-if (!isNative(nativeCreate)) {
-    nativeCreate = function nativeCreate(object) {
-        var newObject;
-
-        function F() {
-            this.constructor = F;
-        }
-
-        if (isNull(object)) {
-            F.prototype = null;
-            newObject = new F();
-            newObject.constructor = newObject.__proto__ = null;
-            delete newObject.__proto__;
-            return newObject;
-        } else {
-            F.prototype = object;
-            return new F();
-        }
-    };
-}
-
-},
-function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/extend@0.0.2/src/index.js-=@*/
-var keys = require(217),
-    isNative = require(206);
-
-
-var nativeAssign = Object.assign,
-    extend, baseExtend;
-
-
-if (isNative(nativeAssign)) {
-    extend = nativeAssign;
-} else {
-    extend = function extend(out) {
-        var i = 0,
-            il = arguments.length - 1;
-
-        while (i++ < il) {
-            baseExtend(out, arguments[i]);
-        }
-
-        return out;
-    };
-    baseExtend = function baseExtend(a, b) {
-        var objectKeys = keys(b),
-            i = -1,
-            il = objectKeys.length - 1,
-            key;
-
-        while (i++ < il) {
-            key = objectKeys[i];
-            a[key] = b[key];
-        }
-    };
-}
-
-
-module.exports = extend;
-
-},
-function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/mixin@0.0.2/src/index.js-=@*/
-var keys = require(219),
-    isNullOrUndefined = require(203);
-
-
-module.exports = mixin;
-
-
-function mixin(out) {
-    var i = 0,
-        il = arguments.length - 1;
-
-    while (i++ < il) {
-        baseMixin(out, arguments[i]);
-    }
-
-    return out;
-}
-
-function baseMixin(a, b) {
-    var objectKeys = keys(b),
-        i = -1,
-        il = objectKeys.length - 1,
-        key, value;
-
-    while (i++ < il) {
-        key = objectKeys[i];
-
-        if (isNullOrUndefined(a[key]) && !isNullOrUndefined((value = b[key]))) {
-            a[key] = value;
-        }
-    }
-}
-
-},
-function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/define_property@0.0.2/src/index.js-=@*/
-var isObject = require(201),
-    isFunction = require(188),
-    isPrimitive = require(205),
-    isNative = require(206),
-    has = require(218);
-
-
-var nativeDefineProperty = Object.defineProperty;
-
-
-module.exports = defineProperty;
-
-
-function defineProperty(object, name, descriptor) {
-    if (isPrimitive(descriptor) || isFunction(descriptor)) {
-        descriptor = {
-            value: descriptor
-        };
-    }
-    return nativeDefineProperty(object, name, descriptor);
-}
-
-defineProperty.hasGettersSetters = true;
-
-if (!isNative(nativeDefineProperty) || !(function() {
-        var object = {},
-            value = {};
-
-        try {
-            nativeDefineProperty(object, "key", {
-                value: value
-            });
-            if (has(object, "key") && object.key === value) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (e) {}
-
-        return false;
-    }())) {
-
-    defineProperty.hasGettersSetters = false;
-
-    nativeDefineProperty = function defineProperty(object, name, descriptor) {
-        if (!isObject(object)) {
-            throw new TypeError("defineProperty(object, name, descriptor) called on non-object");
-        }
-        if (has(descriptor, "get") || has(descriptor, "set")) {
-            throw new TypeError("defineProperty(object, name, descriptor) this environment does not support getters or setters");
-        }
-        object[name] = descriptor.value;
-    };
-}
-
-},
-function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/keys@0.0.1/src/index.js-=@*/
-var has = require(218),
-    isNative = require(206),
-    isNullOrUndefined = require(203),
-    isObject = require(201);
-
-
-var nativeKeys = Object.keys;
-
-
-module.exports = keys;
-
-
-function keys(value) {
-    if (isNullOrUndefined(value)) {
-        return [];
-    } else {
-        return nativeKeys(isObject(value) ? value : Object(value));
-    }
-}
-
-if (!isNative(nativeKeys)) {
-    nativeKeys = function keys(value) {
-        var localHas = has,
-            out = [],
-            i = 0,
-            key;
-
-        for (key in value) {
-            if (localHas(value, key)) {
-                out[i++] = key;
-            }
-        }
-
-        return out;
-    };
-}
-
-},
-function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/has@0.0.1/src/index.js-=@*/
-var isNative = require(206),
-    getPrototypeOf = require(211),
-    isNullOrUndefined = require(203);
-
-
-var nativeHasOwnProp = Object.prototype.hasOwnProperty,
-    baseHas;
-
-
-module.exports = has;
-
-
-function has(object, key) {
-    if (isNullOrUndefined(object)) {
-        return false;
-    } else {
-        return baseHas(object, key);
-    }
-}
-
-if (isNative(nativeHasOwnProp)) {
-    baseHas = function baseHas(object, key) {
-        if (object.hasOwnProperty) {
-            return object.hasOwnProperty(key);
-        } else {
-            return nativeHasOwnProp.call(object, key);
-        }
-    };
-} else {
-    baseHas = function baseHas(object, key) {
-        var proto = getPrototypeOf(object);
-
-        if (isNullOrUndefined(proto)) {
-            return key in object;
-        } else {
-            return (key in object) && (!(key in proto) || proto[key] !== object[key]);
-        }
-    };
-}
-
-},
-function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/keys@0.0.2/src/index.js-=@*/
-var has = require(207),
-    isNative = require(206),
-    isNullOrUndefined = require(203),
-    isObject = require(201);
-
-
-var nativeKeys = Object.keys;
-
-
-module.exports = keys;
-
-
-function keys(value) {
-    if (isNullOrUndefined(value)) {
-        return [];
-    } else {
-        return nativeKeys(isObject(value) ? value : Object(value));
-    }
-}
-
-if (!isNative(nativeKeys)) {
-    nativeKeys = function keys(value) {
-        var localHas = has,
-            out = [],
-            i = 0,
-            key;
-
-        for (key in value) {
-            if (localHas(value, key)) {
-                out[i++] = key;
-            }
-        }
-
-        return out;
-    };
-}
-
-},
-function(require, exports, module, undefined, global) {
 /*@=-redux@3.6.0/lib/index.js-=@*/
 var process = require(9);
 'use strict';
@@ -23875,27 +24280,27 @@ var process = require(9);
 exports.__esModule = true;
 exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-var _createStore = require(221);
+var _createStore = require(215);
 
 var _createStore2 = _interopRequireDefault(_createStore);
 
-var _combineReducers = require(222);
+var _combineReducers = require(216);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _bindActionCreators = require(223);
+var _bindActionCreators = require(217);
 
 var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-var _applyMiddleware = require(224);
+var _applyMiddleware = require(218);
 
 var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-var _compose = require(225);
+var _compose = require(219);
 
 var _compose2 = _interopRequireDefault(_compose);
 
-var _warning = require(226);
+var _warning = require(220);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -23925,11 +24330,11 @@ exports.__esModule = true;
 exports.ActionTypes = undefined;
 exports['default'] = createStore;
 
-var _isPlainObject = require(227);
+var _isPlainObject = require(221);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _symbolObservable = require(228);
+var _symbolObservable = require(222);
 
 var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -24189,13 +24594,13 @@ var process = require(9);
 exports.__esModule = true;
 exports['default'] = combineReducers;
 
-var _createStore = require(221);
+var _createStore = require(215);
 
-var _isPlainObject = require(227);
+var _isPlainObject = require(221);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _warning = require(226);
+var _warning = require(220);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -24391,7 +24796,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports['default'] = applyMiddleware;
 
-var _compose = require(225);
+var _compose = require(219);
 
 var _compose2 = _interopRequireDefault(_compose);
 
@@ -24513,9 +24918,9 @@ function warning(message) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-lodash@4.17.4/isPlainObject.js-=@*/
-var baseGetTag = require(229),
-    getPrototype = require(230),
-    isObjectLike = require(231);
+var baseGetTag = require(223),
+    getPrototype = require(224),
+    isObjectLike = require(225);
 
 /** `Object#toString` result references. */
 var objectTag = '[object Object]';
@@ -24579,14 +24984,14 @@ module.exports = isPlainObject;
 },
 function(require, exports, module, undefined, global) {
 /*@=-symbol-observable@1.0.4/index.js-=@*/
-module.exports = require(238);
+module.exports = require(232);
 
 },
 function(require, exports, module, undefined, global) {
 /*@=-lodash@4.17.4/_baseGetTag.js-=@*/
-var Symbol = require(232),
-    getRawTag = require(233),
-    objectToString = require(234);
+var Symbol = require(226),
+    getRawTag = require(227),
+    objectToString = require(228);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -24616,7 +25021,7 @@ module.exports = baseGetTag;
 },
 function(require, exports, module, undefined, global) {
 /*@=-lodash@4.17.4/_getPrototype.js-=@*/
-var overArg = require(237);
+var overArg = require(231);
 
 /** Built-in value references. */
 var getPrototype = overArg(Object.getPrototypeOf, Object);
@@ -24659,7 +25064,7 @@ module.exports = isObjectLike;
 },
 function(require, exports, module, undefined, global) {
 /*@=-lodash@4.17.4/_Symbol.js-=@*/
-var root = require(235);
+var root = require(229);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -24669,7 +25074,7 @@ module.exports = Symbol;
 },
 function(require, exports, module, undefined, global) {
 /*@=-lodash@4.17.4/_getRawTag.js-=@*/
-var Symbol = require(232);
+var Symbol = require(226);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -24745,7 +25150,7 @@ module.exports = objectToString;
 },
 function(require, exports, module, undefined, global) {
 /*@=-lodash@4.17.4/_root.js-=@*/
-var freeGlobal = require(236);
+var freeGlobal = require(230);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -24791,7 +25196,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = require(239);
+var _ponyfill = require(233);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -24842,8 +25247,8 @@ function symbolObservablePonyfill(root) {
 };
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/react-store@0.0.1/src/Provider.js-=@*/
-var createReactClass = require(242),
+/*@=-@nathanfaucett/react-store@0.0.2/src/Provider.js-=@*/
+var createReactClass = require(4),
     PropTypes = require(3);
 
 
@@ -24880,12 +25285,12 @@ Provider.childContextTypes = {
 module.exports = Provider;
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/react-store@0.0.1/src/connect.js-=@*/
+/*@=-@nathanfaucett/react-store@0.0.2/src/connect.js-=@*/
 var React = require(1),
     PropTypes = require(3),
-    extend = require(214),
-    createReactClass = require(242),
-    notEqual = require(244);
+    extend = require(236),
+    createReactClass = require(4),
+    shallowEquals = require(237);
 
 
 module.exports = connect;
@@ -24954,8 +25359,8 @@ function connect(mapStateToProps, mapDispatchToProps, WrappedComponent) {
         _this._mappedProps = extend({}, _this._mappedState, _this._mappedDispatch);
 
         return (
-            notEqual(prevMappedState, _this._mappedState) ||
-            notEqual(prevChildren, nextProps.children)
+            !shallowEquals(prevMappedState, _this._mappedState) ||
+            !shallowEquals(prevChildren, nextProps.children)
         );
     }
 
@@ -24974,821 +25379,188 @@ function connect(mapStateToProps, mapDispatchToProps, WrappedComponent) {
 
     return Connect;
 }
-},
-function(require, exports, module, undefined, global) {
-/*@=-create-react-class@15.5.3/index.js-=@*/
-/**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- */
-
-'use strict';
-
-var React = require(1);
-var factory = require(243);
-
-// Hack to grab NoopUpdateQueue from isomorphic React
-var ReactNoopUpdateQueue = new React.Component().updater;
-
-module.exports = factory(
-  React.Component,
-  React.isValidElement,
-  ReactNoopUpdateQueue
-);
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-create-react-class@15.5.3/factory.js-=@*/
-var process = require(9);
-/**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- */
+/*@=-@nathanfaucett/extend@0.0.2/src/index.js-=@*/
+var keys = require(238),
+    isNative = require(207);
 
-'use strict';
 
-var _assign = require(10);
+var nativeAssign = Object.assign,
+    extend, baseExtend;
 
-var emptyObject = require(33);
-var _invariant = require(27);
 
-if (process.env.NODE_ENV !== 'production') {
-  var warning = require(20);
-}
-
-var MIXINS_KEY = 'mixins';
-
-// Helper function to allow the creation of anonymous functions which do not
-// have .name set to the name of the variable being assigned to.
-function identity(fn) {
-  return fn;
-}
-
-var ReactPropTypeLocationNames;
-if (process.env.NODE_ENV !== 'production') {
-  ReactPropTypeLocationNames = {
-    prop: 'prop',
-    context: 'context',
-    childContext: 'child context',
-  };
+if (isNative(nativeAssign)) {
+    extend = nativeAssign;
 } else {
-  ReactPropTypeLocationNames = {};
+    extend = function extend(out) {
+        var i = 0,
+            il = arguments.length - 1;
+
+        while (i++ < il) {
+            baseExtend(out, arguments[i]);
+        }
+
+        return out;
+    };
+    baseExtend = function baseExtend(a, b) {
+        var objectKeys = keys(b),
+            i = -1,
+            il = objectKeys.length - 1,
+            key;
+
+        while (i++ < il) {
+            key = objectKeys[i];
+            a[key] = b[key];
+        }
+    };
 }
 
-function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
-  /**
-   * Policies that describe methods in `ReactClassInterface`.
-   */
 
-
-  var injectedMixins = [];
-
-  /**
-   * Composite components are higher-level components that compose other composite
-   * or host components.
-   *
-   * To create a new type of `ReactClass`, pass a specification of
-   * your new class to `React.createClass`. The only requirement of your class
-   * specification is that you implement a `render` method.
-   *
-   *   var MyComponent = React.createClass({
-   *     render: function() {
-   *       return <div>Hello World</div>;
-   *     }
-   *   });
-   *
-   * The class specification supports a specific protocol of methods that have
-   * special meaning (e.g. `render`). See `ReactClassInterface` for
-   * more the comprehensive protocol. Any other properties and methods in the
-   * class specification will be available on the prototype.
-   *
-   * @interface ReactClassInterface
-   * @internal
-   */
-  var ReactClassInterface = {
-
-    /**
-     * An array of Mixin objects to include when defining your component.
-     *
-     * @type {array}
-     * @optional
-     */
-    mixins: 'DEFINE_MANY',
-
-    /**
-     * An object containing properties and methods that should be defined on
-     * the component's constructor instead of its prototype (static methods).
-     *
-     * @type {object}
-     * @optional
-     */
-    statics: 'DEFINE_MANY',
-
-    /**
-     * Definition of prop types for this component.
-     *
-     * @type {object}
-     * @optional
-     */
-    propTypes: 'DEFINE_MANY',
-
-    /**
-     * Definition of context types for this component.
-     *
-     * @type {object}
-     * @optional
-     */
-    contextTypes: 'DEFINE_MANY',
-
-    /**
-     * Definition of context types this component sets for its children.
-     *
-     * @type {object}
-     * @optional
-     */
-    childContextTypes: 'DEFINE_MANY',
-
-    // ==== Definition methods ====
-
-    /**
-     * Invoked when the component is mounted. Values in the mapping will be set on
-     * `this.props` if that prop is not specified (i.e. using an `in` check).
-     *
-     * This method is invoked before `getInitialState` and therefore cannot rely
-     * on `this.state` or use `this.setState`.
-     *
-     * @return {object}
-     * @optional
-     */
-    getDefaultProps: 'DEFINE_MANY_MERGED',
-
-    /**
-     * Invoked once before the component is mounted. The return value will be used
-     * as the initial value of `this.state`.
-     *
-     *   getInitialState: function() {
-     *     return {
-     *       isOn: false,
-     *       fooBaz: new BazFoo()
-     *     }
-     *   }
-     *
-     * @return {object}
-     * @optional
-     */
-    getInitialState: 'DEFINE_MANY_MERGED',
-
-    /**
-     * @return {object}
-     * @optional
-     */
-    getChildContext: 'DEFINE_MANY_MERGED',
-
-    /**
-     * Uses props from `this.props` and state from `this.state` to render the
-     * structure of the component.
-     *
-     * No guarantees are made about when or how often this method is invoked, so
-     * it must not have side effects.
-     *
-     *   render: function() {
-     *     var name = this.props.name;
-     *     return <div>Hello, {name}!</div>;
-     *   }
-     *
-     * @return {ReactComponent}
-     * @nosideeffects
-     * @required
-     */
-    render: 'DEFINE_ONCE',
-
-    // ==== Delegate methods ====
-
-    /**
-     * Invoked when the component is initially created and about to be mounted.
-     * This may have side effects, but any external subscriptions or data created
-     * by this method must be cleaned up in `componentWillUnmount`.
-     *
-     * @optional
-     */
-    componentWillMount: 'DEFINE_MANY',
-
-    /**
-     * Invoked when the component has been mounted and has a DOM representation.
-     * However, there is no guarantee that the DOM node is in the document.
-     *
-     * Use this as an opportunity to operate on the DOM when the component has
-     * been mounted (initialized and rendered) for the first time.
-     *
-     * @param {DOMElement} rootNode DOM element representing the component.
-     * @optional
-     */
-    componentDidMount: 'DEFINE_MANY',
-
-    /**
-     * Invoked before the component receives new props.
-     *
-     * Use this as an opportunity to react to a prop transition by updating the
-     * state using `this.setState`. Current props are accessed via `this.props`.
-     *
-     *   componentWillReceiveProps: function(nextProps, nextContext) {
-     *     this.setState({
-     *       likesIncreasing: nextProps.likeCount > this.props.likeCount
-     *     });
-     *   }
-     *
-     * NOTE: There is no equivalent `componentWillReceiveState`. An incoming prop
-     * transition may cause a state change, but the opposite is not true. If you
-     * need it, you are probably looking for `componentWillUpdate`.
-     *
-     * @param {object} nextProps
-     * @optional
-     */
-    componentWillReceiveProps: 'DEFINE_MANY',
-
-    /**
-     * Invoked while deciding if the component should be updated as a result of
-     * receiving new props, state and/or context.
-     *
-     * Use this as an opportunity to `return false` when you're certain that the
-     * transition to the new props/state/context will not require a component
-     * update.
-     *
-     *   shouldComponentUpdate: function(nextProps, nextState, nextContext) {
-     *     return !equal(nextProps, this.props) ||
-     *       !equal(nextState, this.state) ||
-     *       !equal(nextContext, this.context);
-     *   }
-     *
-     * @param {object} nextProps
-     * @param {?object} nextState
-     * @param {?object} nextContext
-     * @return {boolean} True if the component should update.
-     * @optional
-     */
-    shouldComponentUpdate: 'DEFINE_ONCE',
-
-    /**
-     * Invoked when the component is about to update due to a transition from
-     * `this.props`, `this.state` and `this.context` to `nextProps`, `nextState`
-     * and `nextContext`.
-     *
-     * Use this as an opportunity to perform preparation before an update occurs.
-     *
-     * NOTE: You **cannot** use `this.setState()` in this method.
-     *
-     * @param {object} nextProps
-     * @param {?object} nextState
-     * @param {?object} nextContext
-     * @param {ReactReconcileTransaction} transaction
-     * @optional
-     */
-    componentWillUpdate: 'DEFINE_MANY',
-
-    /**
-     * Invoked when the component's DOM representation has been updated.
-     *
-     * Use this as an opportunity to operate on the DOM when the component has
-     * been updated.
-     *
-     * @param {object} prevProps
-     * @param {?object} prevState
-     * @param {?object} prevContext
-     * @param {DOMElement} rootNode DOM element representing the component.
-     * @optional
-     */
-    componentDidUpdate: 'DEFINE_MANY',
-
-    /**
-     * Invoked when the component is about to be removed from its parent and have
-     * its DOM representation destroyed.
-     *
-     * Use this as an opportunity to deallocate any external resources.
-     *
-     * NOTE: There is no `componentDidUnmount` since your component will have been
-     * destroyed by that point.
-     *
-     * @optional
-     */
-    componentWillUnmount: 'DEFINE_MANY',
-
-    // ==== Advanced methods ====
-
-    /**
-     * Updates the component's currently mounted DOM representation.
-     *
-     * By default, this implements React's rendering and reconciliation algorithm.
-     * Sophisticated clients may wish to override this.
-     *
-     * @param {ReactReconcileTransaction} transaction
-     * @internal
-     * @overridable
-     */
-    updateComponent: 'OVERRIDE_BASE'
-
-  };
-
-  /**
-   * Mapping from class specification keys to special processing functions.
-   *
-   * Although these are declared like instance properties in the specification
-   * when defining classes using `React.createClass`, they are actually static
-   * and are accessible on the constructor instead of the prototype. Despite
-   * being static, they must be defined outside of the "statics" key under
-   * which all other static methods are defined.
-   */
-  var RESERVED_SPEC_KEYS = {
-    displayName: function (Constructor, displayName) {
-      Constructor.displayName = displayName;
-    },
-    mixins: function (Constructor, mixins) {
-      if (mixins) {
-        for (var i = 0; i < mixins.length; i++) {
-          mixSpecIntoComponent(Constructor, mixins[i]);
-        }
-      }
-    },
-    childContextTypes: function (Constructor, childContextTypes) {
-      if (process.env.NODE_ENV !== 'production') {
-        validateTypeDef(Constructor, childContextTypes, 'childContext');
-      }
-      Constructor.childContextTypes = _assign({}, Constructor.childContextTypes, childContextTypes);
-    },
-    contextTypes: function (Constructor, contextTypes) {
-      if (process.env.NODE_ENV !== 'production') {
-        validateTypeDef(Constructor, contextTypes, 'context');
-      }
-      Constructor.contextTypes = _assign({}, Constructor.contextTypes, contextTypes);
-    },
-    /**
-     * Special case getDefaultProps which should move into statics but requires
-     * automatic merging.
-     */
-    getDefaultProps: function (Constructor, getDefaultProps) {
-      if (Constructor.getDefaultProps) {
-        Constructor.getDefaultProps = createMergedResultFunction(Constructor.getDefaultProps, getDefaultProps);
-      } else {
-        Constructor.getDefaultProps = getDefaultProps;
-      }
-    },
-    propTypes: function (Constructor, propTypes) {
-      if (process.env.NODE_ENV !== 'production') {
-        validateTypeDef(Constructor, propTypes, 'prop');
-      }
-      Constructor.propTypes = _assign({}, Constructor.propTypes, propTypes);
-    },
-    statics: function (Constructor, statics) {
-      mixStaticSpecIntoComponent(Constructor, statics);
-    },
-    autobind: function () {} };
-
-  function validateTypeDef(Constructor, typeDef, location) {
-    for (var propName in typeDef) {
-      if (typeDef.hasOwnProperty(propName)) {
-        // use a warning instead of an _invariant so components
-        // don't show up in prod but only in __DEV__
-        process.env.NODE_ENV !== 'production' ? warning(typeof typeDef[propName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', Constructor.displayName || 'ReactClass', ReactPropTypeLocationNames[location], propName) : void 0;
-      }
-    }
-  }
-
-  function validateMethodOverride(isAlreadyDefined, name) {
-    var specPolicy = ReactClassInterface.hasOwnProperty(name) ? ReactClassInterface[name] : null;
-
-    // Disallow overriding of base class methods unless explicitly allowed.
-    if (ReactClassMixin.hasOwnProperty(name)) {
-      _invariant(specPolicy === 'OVERRIDE_BASE', 'ReactClassInterface: You are attempting to override ' + '`%s` from your class specification. Ensure that your method names ' + 'do not overlap with React methods.', name);
-    }
-
-    // Disallow defining methods more than once unless explicitly allowed.
-    if (isAlreadyDefined) {
-      _invariant(specPolicy === 'DEFINE_MANY' || specPolicy === 'DEFINE_MANY_MERGED', 'ReactClassInterface: You are attempting to define ' + '`%s` on your component more than once. This conflict may be due ' + 'to a mixin.', name);
-    }
-  }
-
-  /**
-   * Mixin helper which handles policy validation and reserved
-   * specification keys when building React classes.
-   */
-  function mixSpecIntoComponent(Constructor, spec) {
-    if (!spec) {
-      if (process.env.NODE_ENV !== 'production') {
-        var typeofSpec = typeof spec;
-        var isMixinValid = typeofSpec === 'object' && spec !== null;
-
-        process.env.NODE_ENV !== 'production' ? warning(isMixinValid, '%s: You\'re attempting to include a mixin that is either null ' + 'or not an object. Check the mixins included by the component, ' + 'as well as any mixins they include themselves. ' + 'Expected object but got %s.', Constructor.displayName || 'ReactClass', spec === null ? null : typeofSpec) : void 0;
-      }
-
-      return;
-    }
-
-    _invariant(typeof spec !== 'function', 'ReactClass: You\'re attempting to ' + 'use a component class or function as a mixin. Instead, just use a ' + 'regular object.');
-    _invariant(!isValidElement(spec), 'ReactClass: You\'re attempting to ' + 'use a component as a mixin. Instead, just use a regular object.');
-
-    var proto = Constructor.prototype;
-    var autoBindPairs = proto.__reactAutoBindPairs;
-
-    // By handling mixins before any other properties, we ensure the same
-    // chaining order is applied to methods with DEFINE_MANY policy, whether
-    // mixins are listed before or after these methods in the spec.
-    if (spec.hasOwnProperty(MIXINS_KEY)) {
-      RESERVED_SPEC_KEYS.mixins(Constructor, spec.mixins);
-    }
-
-    for (var name in spec) {
-      if (!spec.hasOwnProperty(name)) {
-        continue;
-      }
-
-      if (name === MIXINS_KEY) {
-        // We have already handled mixins in a special case above.
-        continue;
-      }
-
-      var property = spec[name];
-      var isAlreadyDefined = proto.hasOwnProperty(name);
-      validateMethodOverride(isAlreadyDefined, name);
-
-      if (RESERVED_SPEC_KEYS.hasOwnProperty(name)) {
-        RESERVED_SPEC_KEYS[name](Constructor, property);
-      } else {
-        // Setup methods on prototype:
-        // The following member methods should not be automatically bound:
-        // 1. Expected ReactClass methods (in the "interface").
-        // 2. Overridden methods (that were mixed in).
-        var isReactClassMethod = ReactClassInterface.hasOwnProperty(name);
-        var isFunction = typeof property === 'function';
-        var shouldAutoBind = isFunction && !isReactClassMethod && !isAlreadyDefined && spec.autobind !== false;
-
-        if (shouldAutoBind) {
-          autoBindPairs.push(name, property);
-          proto[name] = property;
-        } else {
-          if (isAlreadyDefined) {
-            var specPolicy = ReactClassInterface[name];
-
-            // These cases should already be caught by validateMethodOverride.
-            _invariant(isReactClassMethod && (specPolicy === 'DEFINE_MANY_MERGED' || specPolicy === 'DEFINE_MANY'), 'ReactClass: Unexpected spec policy %s for key %s ' + 'when mixing in component specs.', specPolicy, name);
-
-            // For methods which are defined more than once, call the existing
-            // methods before calling the new property, merging if appropriate.
-            if (specPolicy === 'DEFINE_MANY_MERGED') {
-              proto[name] = createMergedResultFunction(proto[name], property);
-            } else if (specPolicy === 'DEFINE_MANY') {
-              proto[name] = createChainedFunction(proto[name], property);
-            }
-          } else {
-            proto[name] = property;
-            if (process.env.NODE_ENV !== 'production') {
-              // Add verbose displayName to the function, which helps when looking
-              // at profiling tools.
-              if (typeof property === 'function' && spec.displayName) {
-                proto[name].displayName = spec.displayName + '_' + name;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  function mixStaticSpecIntoComponent(Constructor, statics) {
-    if (!statics) {
-      return;
-    }
-    for (var name in statics) {
-      var property = statics[name];
-      if (!statics.hasOwnProperty(name)) {
-        continue;
-      }
-
-      var isReserved = name in RESERVED_SPEC_KEYS;
-      _invariant(!isReserved, 'ReactClass: You are attempting to define a reserved ' + 'property, `%s`, that shouldn\'t be on the "statics" key. Define it ' + 'as an instance property instead; it will still be accessible on the ' + 'constructor.', name);
-
-      var isInherited = name in Constructor;
-      _invariant(!isInherited, 'ReactClass: You are attempting to define ' + '`%s` on your component more than once. This conflict may be ' + 'due to a mixin.', name);
-      Constructor[name] = property;
-    }
-  }
-
-  /**
-   * Merge two objects, but throw if both contain the same key.
-   *
-   * @param {object} one The first object, which is mutated.
-   * @param {object} two The second object
-   * @return {object} one after it has been mutated to contain everything in two.
-   */
-  function mergeIntoWithNoDuplicateKeys(one, two) {
-    _invariant(one && two && typeof one === 'object' && typeof two === 'object', 'mergeIntoWithNoDuplicateKeys(): Cannot merge non-objects.');
-
-    for (var key in two) {
-      if (two.hasOwnProperty(key)) {
-        _invariant(one[key] === undefined, 'mergeIntoWithNoDuplicateKeys(): ' + 'Tried to merge two objects with the same key: `%s`. This conflict ' + 'may be due to a mixin; in particular, this may be caused by two ' + 'getInitialState() or getDefaultProps() methods returning objects ' + 'with clashing keys.', key);
-        one[key] = two[key];
-      }
-    }
-    return one;
-  }
-
-  /**
-   * Creates a function that invokes two functions and merges their return values.
-   *
-   * @param {function} one Function to invoke first.
-   * @param {function} two Function to invoke second.
-   * @return {function} Function that invokes the two argument functions.
-   * @private
-   */
-  function createMergedResultFunction(one, two) {
-    return function mergedResult() {
-      var a = one.apply(this, arguments);
-      var b = two.apply(this, arguments);
-      if (a == null) {
-        return b;
-      } else if (b == null) {
-        return a;
-      }
-      var c = {};
-      mergeIntoWithNoDuplicateKeys(c, a);
-      mergeIntoWithNoDuplicateKeys(c, b);
-      return c;
-    };
-  }
-
-  /**
-   * Creates a function that invokes two functions and ignores their return vales.
-   *
-   * @param {function} one Function to invoke first.
-   * @param {function} two Function to invoke second.
-   * @return {function} Function that invokes the two argument functions.
-   * @private
-   */
-  function createChainedFunction(one, two) {
-    return function chainedFunction() {
-      one.apply(this, arguments);
-      two.apply(this, arguments);
-    };
-  }
-
-  /**
-   * Binds a method to the component.
-   *
-   * @param {object} component Component whose method is going to be bound.
-   * @param {function} method Method to be bound.
-   * @return {function} The bound method.
-   */
-  function bindAutoBindMethod(component, method) {
-    var boundMethod = method.bind(component);
-    if (process.env.NODE_ENV !== 'production') {
-      boundMethod.__reactBoundContext = component;
-      boundMethod.__reactBoundMethod = method;
-      boundMethod.__reactBoundArguments = null;
-      var componentName = component.constructor.displayName;
-      var _bind = boundMethod.bind;
-      boundMethod.bind = function (newThis) {
-        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-          args[_key - 1] = arguments[_key];
-        }
-
-        // User is trying to bind() an autobound method; we effectively will
-        // ignore the value of "this" that the user is trying to use, so
-        // let's warn.
-        if (newThis !== component && newThis !== null) {
-          process.env.NODE_ENV !== 'production' ? warning(false, 'bind(): React component methods may only be bound to the ' + 'component instance. See %s', componentName) : void 0;
-        } else if (!args.length) {
-          process.env.NODE_ENV !== 'production' ? warning(false, 'bind(): You are binding a component method to the component. ' + 'React does this for you automatically in a high-performance ' + 'way, so you can safely remove this call. See %s', componentName) : void 0;
-          return boundMethod;
-        }
-        var reboundMethod = _bind.apply(boundMethod, arguments);
-        reboundMethod.__reactBoundContext = component;
-        reboundMethod.__reactBoundMethod = method;
-        reboundMethod.__reactBoundArguments = args;
-        return reboundMethod;
-      };
-    }
-    return boundMethod;
-  }
-
-  /**
-   * Binds all auto-bound methods in a component.
-   *
-   * @param {object} component Component whose method is going to be bound.
-   */
-  function bindAutoBindMethods(component) {
-    var pairs = component.__reactAutoBindPairs;
-    for (var i = 0; i < pairs.length; i += 2) {
-      var autoBindKey = pairs[i];
-      var method = pairs[i + 1];
-      component[autoBindKey] = bindAutoBindMethod(component, method);
-    }
-  }
-
-  var IsMountedMixin = {
-    componentDidMount: function () {
-      this.__isMounted = true;
-    },
-    componentWillUnmount: function () {
-      this.__isMounted = false;
-    }
-  };
-
-  /**
-   * Add more to the ReactClass base class. These are all legacy features and
-   * therefore not already part of the modern ReactComponent.
-   */
-  var ReactClassMixin = {
-
-    /**
-     * TODO: This will be deprecated because state should always keep a consistent
-     * type signature and the only use case for this, is to avoid that.
-     */
-    replaceState: function (newState, callback) {
-      this.updater.enqueueReplaceState(this, newState, callback);
-    },
-
-    /**
-     * Checks whether or not this composite component is mounted.
-     * @return {boolean} True if mounted, false otherwise.
-     * @protected
-     * @final
-     */
-    isMounted: function () {
-      if (process.env.NODE_ENV !== 'production') {
-        process.env.NODE_ENV !== 'production' ? warning(this.__didWarnIsMounted, '%s: isMounted is deprecated. Instead, make sure to clean up ' + 'subscriptions and pending requests in componentWillUnmount to ' + 'prevent memory leaks.', this.constructor && this.constructor.displayName || this.name || 'Component') : void 0;
-        this.__didWarnIsMounted = true;
-      }
-      return !!this.__isMounted;
-    }
-  };
-
-  var ReactClassComponent = function () {};
-  _assign(ReactClassComponent.prototype, ReactComponent.prototype, ReactClassMixin);
-
-  /**
-   * Creates a composite component class given a class specification.
-   * See https://facebook.github.io/react/docs/top-level-api.html#react.createclass
-   *
-   * @param {object} spec Class specification (which must define `render`).
-   * @return {function} Component constructor function.
-   * @public
-   */
-  function createClass(spec) {
-    // To keep our warnings more understandable, we'll use a little hack here to
-    // ensure that Constructor.name !== 'Constructor'. This makes sure we don't
-    // unnecessarily identify a class without displayName as 'Constructor'.
-    var Constructor = identity(function (props, context, updater) {
-      // This constructor gets overridden by mocks. The argument is used
-      // by mocks to assert on what gets mounted.
-
-      if (process.env.NODE_ENV !== 'production') {
-        process.env.NODE_ENV !== 'production' ? warning(this instanceof Constructor, 'Something is calling a React component directly. Use a factory or ' + 'JSX instead. See: https://fb.me/react-legacyfactory') : void 0;
-      }
-
-      // Wire up auto-binding
-      if (this.__reactAutoBindPairs.length) {
-        bindAutoBindMethods(this);
-      }
-
-      this.props = props;
-      this.context = context;
-      this.refs = emptyObject;
-      this.updater = updater || ReactNoopUpdateQueue;
-
-      this.state = null;
-
-      // ReactClasses doesn't have constructors. Instead, they use the
-      // getInitialState and componentWillMount methods for initialization.
-
-      var initialState = this.getInitialState ? this.getInitialState() : null;
-      if (process.env.NODE_ENV !== 'production') {
-        // We allow auto-mocks to proceed as if they're returning null.
-        if (initialState === undefined && this.getInitialState._isMockFunction) {
-          // This is probably bad practice. Consider warning here and
-          // deprecating this convenience.
-          initialState = null;
-        }
-      }
-      _invariant(typeof initialState === 'object' && !Array.isArray(initialState), '%s.getInitialState(): must return an object or null', Constructor.displayName || 'ReactCompositeComponent');
-
-      this.state = initialState;
-    });
-    Constructor.prototype = new ReactClassComponent();
-    Constructor.prototype.constructor = Constructor;
-    Constructor.prototype.__reactAutoBindPairs = [];
-
-    injectedMixins.forEach(mixSpecIntoComponent.bind(null, Constructor));
-
-    mixSpecIntoComponent(Constructor, IsMountedMixin);
-    mixSpecIntoComponent(Constructor, spec);
-
-    // Initialize the defaultProps property after all mixins have been merged.
-    if (Constructor.getDefaultProps) {
-      Constructor.defaultProps = Constructor.getDefaultProps();
-    }
-
-    if (process.env.NODE_ENV !== 'production') {
-      // This is a tag to indicate that the use of these method names is ok,
-      // since it's used with createClass. If it's not, then it's likely a
-      // mistake so we'll warn you to use the static property, property
-      // initializer or constructor respectively.
-      if (Constructor.getDefaultProps) {
-        Constructor.getDefaultProps.isReactClassApproved = {};
-      }
-      if (Constructor.prototype.getInitialState) {
-        Constructor.prototype.getInitialState.isReactClassApproved = {};
-      }
-    }
-
-    _invariant(Constructor.prototype.render, 'createClass(...): Class specification must implement a `render` method.');
-
-    if (process.env.NODE_ENV !== 'production') {
-      process.env.NODE_ENV !== 'production' ? warning(!Constructor.prototype.componentShouldUpdate, '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', spec.displayName || 'A component') : void 0;
-      process.env.NODE_ENV !== 'production' ? warning(!Constructor.prototype.componentWillRecieveProps, '%s has a method called ' + 'componentWillRecieveProps(). Did you mean componentWillReceiveProps()?', spec.displayName || 'A component') : void 0;
-    }
-
-    // Reduce time spent doing lookups by setting these on the prototype.
-    for (var methodName in ReactClassInterface) {
-      if (!Constructor.prototype[methodName]) {
-        Constructor.prototype[methodName] = null;
-      }
-    }
-
-    return Constructor;
-  }
-
-  return createClass;
-}
-
-module.exports = factory;
+module.exports = extend;
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/react-store@0.0.1/src/notEqual.js-=@*/
-var has = require(207),
-    isPrimitive = require(205),
-    isArrayLike = require(192),
-    isObject = require(201);
+/*@=-@nathanfaucett/shallow_equals@0.0.2/src/index.js-=@*/
+var has = require(208),
+    isArrayLike = require(193),
+    isObject = require(202);
 
 
-module.exports = notEqual;
+module.exports = shallowEquals;
 
 
-function notEqual(a, b) {
-    if (isPrimitive(a) && isPrimitive(b)) {
-        return a !== b;
+function shallowEquals(a, b) {
+    if (a === b) {
+        return true;
     } else if (isArrayLike(a) && isArrayLike(b)) {
-        return notEqualArray(a, b);
+        return shallowEqualsArray(a, b);
     } else if (isObject(a) && isObject(b)) {
-        return notEqualObject(a, b);
+        return shallowEqualsObject(a, b);
     } else {
-        return a !== b;
+        return false;
     }
 }
 
-function notEqualArray(a, b) {
+function shallowEqualsArray(a, b) {
     var aLength = a.length,
         i, il;
 
     if (aLength !== b.length) {
-        return true;
+        return false;
     } else {
         i = -1;
         il = aLength - 1;
 
         while (i++ < il) {
             if (a[i] !== b[i]) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
 
-function notEqualObject(a, b) {
+function shallowEqualsObject(a, b) {
     var localHas = has,
         key;
 
     for (key in a) {
         if (a[key] !== b[key]) {
-            return true;
+            return false;
         }
     }
 
     for (key in b) {
         if (!localHas(a, key)) {
-            return true;
+            return false;
         }
     }
 
-    return false;
+    return true;
 }
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/keys@0.0.1/src/index.js-=@*/
+var has = require(239),
+    isNative = require(207),
+    isNullOrUndefined = require(204),
+    isObject = require(202);
+
+
+var nativeKeys = Object.keys;
+
+
+module.exports = keys;
+
+
+function keys(value) {
+    if (isNullOrUndefined(value)) {
+        return [];
+    } else {
+        return nativeKeys(isObject(value) ? value : Object(value));
+    }
+}
+
+if (!isNative(nativeKeys)) {
+    nativeKeys = function keys(value) {
+        var localHas = has,
+            out = [],
+            i = 0,
+            key;
+
+        for (key in value) {
+            if (localHas(value, key)) {
+                out[i++] = key;
+            }
+        }
+
+        return out;
+    };
+}
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/has@0.0.1/src/index.js-=@*/
+var isNative = require(207),
+    getPrototypeOf = require(212),
+    isNullOrUndefined = require(204);
+
+
+var nativeHasOwnProp = Object.prototype.hasOwnProperty,
+    baseHas;
+
+
+module.exports = has;
+
+
+function has(object, key) {
+    if (isNullOrUndefined(object)) {
+        return false;
+    } else {
+        return baseHas(object, key);
+    }
+}
+
+if (isNative(nativeHasOwnProp)) {
+    baseHas = function baseHas(object, key) {
+        if (object.hasOwnProperty) {
+            return object.hasOwnProperty(key);
+        } else {
+            return nativeHasOwnProp.call(object, key);
+        }
+    };
+} else {
+    baseHas = function baseHas(object, key) {
+        var proto = getPrototypeOf(object);
+
+        if (isNullOrUndefined(proto)) {
+            return key in object;
+        } else {
+            return (key in object) && (!(key in proto) || proto[key] !== object[key]);
+        }
+    };
+}
+
 }], {}, void(0), (new Function("return this;"))()));
